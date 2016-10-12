@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>豆瓣api练习</title>
+	<style type="text/css">
+       *{margin:0;padding:0;}
+       #contant{width:60%;margin:20px auto;}
+       input{height:36px;font-size:20px;margin-right:1%;}
+       #id{width:60%;}
+       #submit{width:6%;min-width:120px;}
+
+       #book{margin-top:30px;}
+       #bookimg{float:left;}
+       #log{float:left;margin:10% 4%;}
+       #log p{line-height:36px;}
+       #price{color:red;}
+	</style>
+	<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript">
+        $(function(){
+        	$("#submit").click(function(){
+	        	var inputid=$("#id").val();
+	        	var url="https://api.douban.com/v2/book/"+inputid;
+	        	$.ajax({
+	                url:url,
+	                type:'get',
+	                async:false,
+	                dataType:'jsonp',
+	                
+	                success:function(data){
+	                	var bookid=data.id,
+	                	    author=data.author[0],
+	                	    imgsrc=data.images.large,
+	                	    bookname=data.title,
+	                	    binding=data.binding,
+	                	    price=data.price,
+	                	    pubdate=data.pubdate,
+	                	    publisher=data.publisher;
+
+	                	$("#bookid").text("ID:"+bookid);
+	                	$("#bookname").text("书名:"+bookname);
+	                	$("#bookauthor").text("作者:"+author);
+	                	$("#binding").text("包装:"+binding);
+	                	$("#price").text("$"+price);
+	                	$("#pubdate").text(pubdate+"  "+publisher);
+	                	$("#bookimg").attr("src",imgsrc);
+	                },
+	                error:function(){alert("未查到id为"+inputid+"的书籍")}
+	        	});
+	        	return false;	
+        	})
+        	
+        })
+	</script>
+</head>
+<body>
+	<div id="contant">
+		<div id="search">
+			<form method="get">
+				<input type="number" required="required" id="id" placeholder="请输入要搜索的书单id">
+				<input type="submit" id="submit" value="Search">	
+			</form>
+			
+		</div>
+		<div id="book">
+			<div id="auth">
+				<img src="" id="bookimg">
+				<div id="log">
+					<p id="bookid"></p>
+					<p id="bookname"></p>
+					<p id="bookauthor"></p>
+					<p id="binding"></p>
+					<p id="price"></p>
+					<p id="pubdate"></p>
+					<p id="publisher"></p>
+				</div>
+			</div>
+		</div>
+    </div>
+</body>
+</html>
